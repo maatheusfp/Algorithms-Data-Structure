@@ -57,7 +57,7 @@ void next(List* l){
     }
 }
 
-int remove(List* l){
+void remove(List* l){
     if (l->curr < 0 || l->curr >= l->listSize){
         return NULL;
     } 
@@ -70,5 +70,15 @@ int remove(List* l){
     }
 
     l->listSize--;
-    return it;
+    /* return it; */
+}
+
+int count(List* l, int n){
+    int count;
+    for (int i = 0; i < l->listSize; i++){
+        if (l->listArray[i] == count){
+            count++;
+        }
+    }
+    return count;
 }

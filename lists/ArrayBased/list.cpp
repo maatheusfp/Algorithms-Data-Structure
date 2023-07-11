@@ -16,9 +16,7 @@ List* create_list(int size){
 }
 
 void clear(List* l){
-    for (int i = 0; i < l->listSize; i++){
-        free(l->listArray[i]);
-    }
+    free(l->listArray);
     free(l);
 }
 
@@ -57,7 +55,7 @@ void next(List* l){
     }
 }
 
-void remove(List* l){
+int remove(List* l){
     if (l->curr < 0 || l->curr >= l->listSize){
         return NULL;
     } 
@@ -70,7 +68,7 @@ void remove(List* l){
     }
 
     l->listSize--;
-    /* return it; */
+    return it;
 }
 
 int count(List* l, int n){

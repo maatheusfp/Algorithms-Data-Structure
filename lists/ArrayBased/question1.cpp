@@ -8,12 +8,12 @@ int main(){
     string comando;
     cin >> c;
 
-    while (c--){
+    for (int j = 1; j <= c; j++){
+        cout << "Caso" << " " << j << endl;
         cin >> n;
         List* l = create_list(1000);
 
         for (int i = 1; i <= n; i++){
-            cout << "Caso" << " " << i << endl;
             cin >> comando;
             if (comando == "insert"){
                 cin >> numero;

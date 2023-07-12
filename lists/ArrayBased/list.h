@@ -10,5 +10,7 @@ void moveToEnd(List* l);
 void prev(List* l);
 void next(List* l);
 int remove(List* l);
+int count(List* l, int n);
+void print(List* l);
 
 #endif

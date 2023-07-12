@@ -22,6 +22,8 @@ int main(){
             }
             else if (comando == "count"){
                 cin >> numero;
+                int qtd = count(l, numero);
+                cout << qtd << endl;
             
             }
             else {
@@ -39,6 +41,8 @@ int main(){
                 }
             }
         }
+        print(l);
+        clear(l);
     }
 
     return 0;

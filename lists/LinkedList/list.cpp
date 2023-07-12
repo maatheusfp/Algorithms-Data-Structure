@@ -91,6 +91,10 @@ int count(List* l, int num){
     return contador;
 }
 
+/* void clear(List* l){
+    free()
+} */
+
 int main(){
     int c, n;
     cin >> c;

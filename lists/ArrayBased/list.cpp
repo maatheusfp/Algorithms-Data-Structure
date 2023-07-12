@@ -80,9 +80,3 @@ int count(List* l, int n){
     }
     return count;
 }
-
-void print(List* l){
-    for (int j = 0; j < l->listSize; j++){
-        cout << l->listArray[j] << " ";
-}
-}

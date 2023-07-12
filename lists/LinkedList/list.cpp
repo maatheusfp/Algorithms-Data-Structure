@@ -1,23 +1,24 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 typedef struct link {
     int element;
-    Link* next;
+    link* next;
 } Link;
 
 typedef struct list {
     Link* head;
     Link* tail;
     Link* curr;
-    int cnt; // list size
+    int cnt;
 } List;
 
 Link* create_link(int it, Link* nextval){
     Link* n = (Link*) malloc(sizeof(Link));
     n->element = it;
     n->next = nextval; 
-    return Link* n;
+    return n;
 }
 
 Link* create_link(Link* nextval){
@@ -50,9 +51,9 @@ void prev(List* l){
         cout << "nao eh possivel";
     }
     else {
-        Link temp = = l->head;
-        while (temp.next != l->curr){
-            temp = temp.next;
+        Link* temp = l->head;
+        while (temp->next != l->curr){
+            temp = temp->next;
         }
         l->curr = temp;
     }
@@ -66,7 +67,7 @@ void next(List* l){
 
 int remove(List* l){
     if (l->curr->next == NULL){
-        return NULL;
+        return -1;
     }
     int it = l->curr->next->element;
 
@@ -76,5 +77,56 @@ int remove(List* l){
     l->curr->next = l->curr->next->next;
     l->cnt--;
     return it;
-
 }   
+
+int count(List* l, int num){
+    int contador = 0;
+    Link* temp = l->head;
+    while (temp->next != NULL){
+        if (temp->next->element == num){
+            contador++;
+        }
+        temp = temp->next;
+    }
+    return contador;
+}
+
+int main(){
+    int c, n;
+    cin >> c;
+    string comando;
+
+    for (int i = 1; i <= c; i++){
+        cout << "Caso" << " " << i << endl;
+        cin >> n;
+        List* l = create_list();
+
+        for (int j = 0; j < n; j++){
+            int numero;
+            cin >> comando;
+            if (comando == "insert"){
+                cin >> numero;
+                insert(l, numero);
+            }
+            else if (comando == "count"){
+                int qtd;
+                cin >> numero;
+                qtd = count(l, numero);
+                cout << qtd << endl;
+            }
+            else {
+                if (comando == "remove"){
+                    remove(l);
+                }
+                else if (comando == "prev"){
+                    prev(l);
+                }
+                else if (comando == "next"){
+                    next(l);
+                }
+            }
+        } 
+    }
+
+    return 0;
+}

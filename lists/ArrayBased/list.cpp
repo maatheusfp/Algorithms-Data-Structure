@@ -72,7 +72,7 @@ int remove(List* l){
 }
 
 int count(List* l, int n){
-    int count;
+    int count = 0;
     for (int i = 0; i < l->listSize; i++){
         if (l->listArray[i] == n){
             count++;

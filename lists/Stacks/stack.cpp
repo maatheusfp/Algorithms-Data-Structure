@@ -61,10 +61,10 @@ int main(){
     for (int i = 1;i <= c;i++){
         cout << "Caso" << " " << i << ":" << endl;
 
+        Stack* s = create_stack();
+        
         while (comando != "end"){
             cin >> comando >> numero;
-
-            Stack* s = create_stack();
 
             if (comando == "push"){
                 push(s, numero);

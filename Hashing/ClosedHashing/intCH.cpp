@@ -3,13 +3,18 @@
 
 using namespace std;
 
-int h(int k){
-    int result = k%10;
-    return result;
+int h(char CPF, int n){
+    int soma = 0;
+
+    for (int i = 0; i < 12; i++){
+        int somador = atoi(CPF[i]);
+        soma += somador;
+    }
+    return soma%n;
 }
 
 typedef struct entry{
-    long long int CPF;
+    char CPF[12];
     string nome;
 } Entry;
 
@@ -19,7 +24,7 @@ typedef struct hashDict {
     int Perm[9] = {2, 5, 7, 8, 9, 1, 3, 4, 6};
 } HashDict;
 
-int find(HashDict* d, long long int CPF){
+int find(HashDict* d, char CPF[12]){
     int pos = h(CPF);
     int newPos = pos;
     int i = 0;
@@ -38,7 +43,7 @@ int find(HashDict* d, long long int CPF){
     return -1;
 }
 
-void insert(HashDict* d, long long int CPF, string nome){
+void insert(HashDict* d, char CPF[12], string nome){
     if(d->cnt >= d->m || find(d, CPF) != -1){
         return;
     }
@@ -70,5 +75,7 @@ HashDict* create_dict(int size){
 }
 
 int main(){
+
+
     return 0;
 }

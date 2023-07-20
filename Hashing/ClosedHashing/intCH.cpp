@@ -3,16 +3,6 @@
 
 using namespace std;
 
-int h(char CPF, int n){
-    int soma = 0;
-
-    for (int i = 0; i < 12; i++){
-        int somador = atoi(CPF[i]);
-        soma += somador;
-    }
-    return soma%n;
-}
-
 typedef struct entry{
     char CPF[12];
     string nome;
@@ -21,46 +11,58 @@ typedef struct entry{
 typedef struct hashDict {
     int m, cnt; 
     Entry* H;
-    int Perm[9] = {2, 5, 7, 8, 9, 1, 3, 4, 6};
 } HashDict;
 
-int find(HashDict* d, char CPF[12]){
-    int pos = h(CPF);
+int h(HashDict* d, char CPF[]){
+    int soma = 0;
+    int somador;
+
+    for (int i = 0; i < 11; i++){
+        somador = CPF[i] - '0';
+        soma += somador;
+    }
+    return soma % d->m;
+}
+
+int find(HashDict* d, char CPF[12], int perm[]){
+    int pos = h(d, CPF);
     int newPos = pos;
     int i = 0;
     int contador = 0;
 
     do {
-        if (d->H[newPos].CPF == CPF){
+        if ((strcmp(d->H[newPos].CPF, CPF)) == 1){
             return newPos;
         }
         i++;
-        int offset = d->Perm[i - 1];
+        int offset = perm[i - 1];
         newPos = (pos + offset)%d->m;
         contador++;
-    } while (contador <= 10);
+    } while (contador <= d->m);
 
     return -1;
 }
 
-void insert(HashDict* d, char CPF[12], string nome){
-    if(d->cnt >= d->m || find(d, CPF) != -1){
+void insert(HashDict* d, char CPF[12], string nome, int perm[]){
+    if(d->cnt >= d->m || find(d, CPF, perm) != -1){
         return;
     }
 
-    int pos = h(CPF);
+    int pos = h(d, CPF);
     int newPos;
     if (d->H[pos].CPF != 0){
         int i = 0;
         do {
             i++;
-            int offset = d->Perm[i - 1];
+            int offset = perm[i - 1];
             newPos = (pos + offset)%d->m;
         } while (d->H[newPos].CPF != 0);
         pos = newPos;
     }
     Entry entry;
-    entry.CPF = CPF;
+    for (int j = 0; j < 11; j++){
+        entry.CPF[j] = CPF[j]; 
+    }
     entry.nome = nome;
     d->H[pos] = entry;
     d->cnt++;
@@ -75,7 +77,36 @@ HashDict* create_dict(int size){
 }
 
 int main(){
+    int n, c;
+    cin >> n;
+    int perm[n - 1];
+    char CPF[12];
+    string comando;
+    string nome;
 
+    HashDict* d = create_dict(n);
 
+    for (int i = 0; i < n - 1; i++){
+        cin >> perm[i];
+    }
+    cin >> c;
+
+    for (int j = 0; j < c; j++){
+        cin >> comando >> CPF;
+
+        if (comando == "add"){
+            cin >> nome;
+            insert(d, CPF, nome, perm);
+            cout << "inserido" << endl;
+        }
+        else {
+            if (find(d, CPF, perm) != -1){
+                cout << "adicionado" << endl;
+            }
+            else {
+                cout << "nao" << endl;
+            }
+        }
+    }
     return 0;
 }

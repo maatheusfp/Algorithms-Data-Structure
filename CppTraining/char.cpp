@@ -8,8 +8,8 @@ int main(){
     char word[12];
     cin >> word;
 
-    for (int i = 0; i < 12; i++){
-        int somador = atoi(word[i]);
+    for (int i = 0; i < 11; i++){
+        int somador = word[i] - '0';
         soma += somador;
     }
     cout << soma << endl;

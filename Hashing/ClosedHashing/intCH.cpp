@@ -50,13 +50,13 @@ void insert(HashDict* d, char CPF[12], string nome, int perm[]){
 
     int pos = h(d, CPF);
     int newPos;
-    if (d->H[pos].CPF != 0){
+    if ((strcmp(d->H[pos].CPF, NULL)) != 0){
         int i = 0;
         do {
             i++;
             int offset = perm[i - 1];
             newPos = (pos + offset)%d->m;
-        } while (d->H[newPos].CPF != 0);
+        } while ((strcmp(d->H[newPos].CPF, NULL)) != 0);
         pos = newPos;
     }
     Entry entry;

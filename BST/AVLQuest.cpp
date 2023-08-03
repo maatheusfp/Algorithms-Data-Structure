@@ -5,8 +5,8 @@ using namespace std;
 
 typedef struct bstnode {
     int key;
-    int element;
     int height;
+    string modelo, cor;
     bstnode* left;
     bstnode* right;
 } BSTnode;
@@ -16,10 +16,11 @@ typedef struct bst {
     int nodecount;
 } BST;
 
-BSTnode* create_bstnode(int key, int element){
+BSTnode* create_bstnode(int key, string modelo, string cor){
     BSTnode* n = (BSTnode*) malloc(sizeof(BSTnode)); 
     n->key = key;
-    n->element = element;
+    n->modelo = modelo;
+    n->cor = cor;
     n->height = 0;
     n->left = n->right = nullptr;
     return n;
@@ -36,7 +37,7 @@ int h(BSTnode* rt){
     if (rt == nullptr){
         return -1;
     }
-    return rt->height; /* como calcula a altura da árvore? */
+    return rt->height; 
 }
 
 int getBalance(BSTnode* rt){
@@ -66,15 +67,15 @@ BSTnode* leftRotate(BSTnode* rt){
     return r;
 }
 
-BSTnode* insertHelp(BSTnode* rt, int key, int element){
+BSTnode* insertHelp(BSTnode* rt, int key, string modelo, string cor){
     if (rt == nullptr){
-        return create_bstnode(key, element);
+        return create_bstnode(key, modelo, cor);
     }
     if (rt->key > key){
-        rt->left = insertHelp(rt->left, key, element);
+        rt->left = insertHelp(rt->left, key, modelo, cor);
     }
     else {
-        rt->right = insertHelp(rt->right, key, element);
+        rt->right = insertHelp(rt->right, key, modelo, cor);
     }
 
     rt->height = 1 + max(h(rt->left), h(rt->right));
@@ -125,34 +126,4 @@ void posOrder(BSTnode* rt){
         posOrder(rt->right);
         cout << rt->key << " ";
     }
-}
-
-int main(){
-    int n, numero;
-    string comando;
-    cin >> n;
-
-    BST* bst = create_bst();
-
-    for (int i = 0; i < n; i++){
-        cin >> comando; 
-        if (comando == "insert"){
-            cin >> numero;
-            insert(bst, numero, numero);
-        }
-        else if(comando == "pre"){
-            preOrder(bst->root);
-            cout << endl;
-        }
-        else if(comando == "in"){
-            inOrder(bst->root);
-            cout << endl;
-        }
-        else {
-            posOrder(bst->root);
-            cout << endl;
-        }
-    }
-
-    return 0;
 }

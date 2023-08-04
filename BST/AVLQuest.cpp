@@ -99,14 +99,14 @@ BSTnode* insertHelp(BSTnode* rt, int key, string modelo, string cor){
     return rt;
 }
 
-void insert(BST* bst, int key, int e){
-    bst->root = insertHelp(bst->root, key, e);
+void insert(BST* bst, int key, string modelo, string cor){
+    bst->root = insertHelp(bst->root,key, modelo, cor);
     bst->nodecount++;
 }
 
 void preOrder(BSTnode* rt){
     if (rt != nullptr){
-        cout << rt->key << " ";
+        cout << rt->modelo << " " << rt->cor << endl;
         preOrder(rt->left);
         preOrder(rt->right);
     }
@@ -115,7 +115,7 @@ void preOrder(BSTnode* rt){
 void inOrder(BSTnode* rt){
     if (rt != nullptr){
         inOrder(rt->left);
-        cout << rt->key << " ";
+        cout << rt->modelo << " " << rt->cor << endl;
         inOrder(rt->right);
     }
 }
@@ -124,6 +124,46 @@ void posOrder(BSTnode* rt){
     if (rt != nullptr){
         posOrder(rt->left);
         posOrder(rt->right);
-        cout << rt->key << " ";
+        cout << rt->modelo << " " << rt->cor << endl;
     }
+}
+
+int main(){
+    int n, numero;
+    string modelo;
+    string cor, temp;
+    cin >> n;
+
+    BST* bst = create_bst();
+
+    for (int i = 0; i < n; i++){
+        int maior = 0;
+        int contador = 0;
+        int numero = 0;
+        int indice;
+
+        cin >> modelo;
+        while (numero >= 0){
+            cin >> numero;
+            if (numero > maior){
+                maior = numero;
+                indice = contador;
+            }
+            contador++;
+        }
+        contador--;
+        for(int j = 0; j < contador; j++){
+            cin >> temp;
+            if (indice == 0){
+                cor = temp;
+            }
+            indice--;
+        }
+
+        insert(bst, maior, modelo, cor);
+    }
+
+    posOrder(bst->root);
+
+    return 0;
 }

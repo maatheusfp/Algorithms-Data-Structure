@@ -2,84 +2,62 @@
 #include <stdlib.h>
 using namespace std;
 
-void merge(long long array[], int l, int m, int r){
-    int i, j, k;
-    int leftLength = m - l + 1;
-    int rightLength = r - m;
+void merge(long long array[], int l, int r){
+    int temp[l + r + 1];
+    for (int i = l; i <= r; i++){
+        temp[i] = array[i];
+    }
 
-    long long tempLeft[leftLength];
-    long long tempRight[rightLength];
+    int m = (l + r) / 2;
+    int i1 = l;
+    int i2 = m + 1;
 
-    for (int i = 0; i < leftLength; i++)
-        tempLeft[i] = array[l + i];
-
-    for (int j = 0; j < rightLength; j++)
-        tempRight[j] = array[m + 1 + j];
-    
-    i = 0;
-    j = 0;
-    k = l;
-
-    while (i < leftLength && j < rightLength) {
-        if (tempLeft[i] <= tempRight[j]) {
-            array[k] = tempLeft[i];
-            i++;
+    for (int curr = l; curr <= r; curr++){
+        if (i1 == (m + 1)){
+            array[curr] = temp[i2++];
+        }
+        else if (i2 > r) {
+            array[curr] = temp[i1++];
+        }
+        else if (temp[i1] <= temp[i2]){
+            array[curr] = temp[i1++];
         }
         else {
-            array[k] = tempRight[j];
-            j++;
+            array[curr] = temp[i2++];
         }
-        k++;
     }
 
-    while (i < leftLength) {
-        array[k] = tempLeft[i];
-        i++;
-        k++;
-    }
-
-    while (j < rightLength) {
-        array[k] = tempRight[j];
-        j++;
-        k++;
-    }
 }
-
 void mergesort(long long array[], int l, int r){
     if (l < r){
-        int m = (l + r) / 2;
-        
+        int m = (l + r)/2;
         mergesort(array, l, m);
         mergesort(array, m + 1, r);
-        merge(array, l, m, r);
+        merge(array, l, r);
     }
-}
+} 
 
 int main(){
     int n, q, x, y, i;
     long long soma;
     cin >> n >> q;
-    long long array[n];
+    long long array[n + 1];
+    array[0] = 0;
 
     for (int j = 0; j < n; j++){
-        cin >> array[j];
+        cin >> array[j + 1];
     }
 
-    mergesort(array, 0, n - 1);
+    mergesort(array, 0, n);
+
+    for (int j = 1; j <= n; j++){
+        array[j] += array[j - 1]; 
+    }
 
     while (q--){
         cin >> x >> y;
 
-        soma = 0;
-        i = n - x;
-
-        while (y > 0){
-            soma += array[i];
-            i++;
-            y--;
-        }
-
-        cout << soma << endl;
+        cout << (array[n + y - x] - array[n - x]) << endl;
     }
 
     return 0;

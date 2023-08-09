@@ -62,7 +62,7 @@ int main() {
 
     while (c--){
         cin >> n;
-        int array[n];
+        array[n];
 
         for (int k = 0; k < n; k++){
             cin >> array[k];

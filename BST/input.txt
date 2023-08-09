@@ -7,7 +7,7 @@ Mercedes
 laranja cinza azul dourada preta
 BMW
 15 83 74 63 -1
-vermelha preta verde cinza amarela
+vermelha preta verde cinza
 Volvo
 60 7 11 -1
 branco preto cinza

@@ -40,7 +40,7 @@ int find(Dict* d, string name){
         return pos;
     }
 
-    for (int i = 0; i <= 19; i++){
+    for (int i = 0; i <= 20; i++){
         if (name == (d->H[pos + (i*i) + (23*i)].name)){
             return pos;
         }
@@ -53,27 +53,37 @@ void insert(Dict* d, string nome){
         return;
     }
     int pos = h(d, nome);
-    int newPos;
-
-    if (d->H[pos].name != ""){
-        int i = 0;
-        do {
-            i++;
-            newPos = (pos + (i*i) + (23*i)) % 101;
-        } while (d->H[newPos].name != "" && i <= 19);
-        pos = newPos;
-    }
-
-    d->H[pos].name = nome;
-    d->cnt++;
+    
+    if (d->H[pos].name == ""){
+		d->H[pos].name = nome;
+		d->cnt++;
+	}
+    else {
+        int newPos;
+        int found = 0;
+        int j = 1;
+        while(found == 0 && j <= 20){
+		    newPos = (pos+(j*j)+(23*j))%101;
+            if (d->H[newPos].name == ""){
+                d->H[newPos].name = nome;
+                found = 1;
+                d->cnt++;
+	            }
+            j++;    
+		}
+	}
 }
+	
 
 void remove(Dict* d, string nome){
-    int s = nome.length();
-    int pos = find(d, nome);
-
-    if (pos != -1){
-        d->H[pos].name = "";
+    for (int i = 0; i < 101; i++){
+        if(d->H[i].name == nome){
+            d->H[i].name = "";
+            d->cnt--;
+            if (d->cnt < 0){
+                d->cnt = 0;
+            }
+        }
     }
 }
 

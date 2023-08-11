@@ -46,6 +46,10 @@ void moveToStart(List* l){
     l->curr = l->head;
 }
 
+void moveToEnd(List* l){
+    l->curr = l->tail;
+}
+
 void prev(List* l){
     if (l->curr == l->head){
         cout << "nao eh possivel";

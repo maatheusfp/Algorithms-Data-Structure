@@ -44,6 +44,22 @@ long long int getBalance(BSTnode* rt){
     return (h(rt->left) - h(rt->right));
 }
 
+long long int ranking(BSTnode* rt){
+    if (rt == nullptr) return 0;
+    return 1 + rt->size_left + rt->size_right;
+}
+
+long long int findIndex(BSTnode* rt, long long int key){
+    if (rt == nullptr) return -9000000;
+    if ((rt->key) > key) {
+        return findIndex(rt->left, key);
+    } else if (rt->key == key) {
+        return 1 + rt->size_left;
+    } else {
+        return 1 + rt->size_left + findIndex(rt->right, key);
+    }
+}
+
 BSTnode* rightRotate(BSTnode* rt){  
     BSTnode* l = rt->left;
     BSTnode* lr = l->right;
@@ -51,8 +67,11 @@ BSTnode* rightRotate(BSTnode* rt){
     rt->left = lr;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     l->height = max(h(l->left), h(l->right)) + 1;
-    rt->size_left = l->size_right;
-    l->size_right = (rt->size_right + rt->size_left)+1;
+
+    rt->size_left = ranking(rt->left);
+    rt->size_right = ranking(rt->right);
+    l->size_right = ranking(l->right);
+    l->size_left = ranking(l->left);
     return l;
 }
 
@@ -63,8 +82,11 @@ BSTnode* leftRotate(BSTnode* rt){
     rt->right = rl;
     rt->height = max(h(rt->left), h(rt->right)) + 1;
     r->height = max(h(r->left), h(r->right)) + 1;
-    rt->size_right = r->size_left;
-    r->size_left = (rt->size_left + rt->size_right) + 1;
+    
+    rt->size_left = ranking(rt->left);
+    rt->size_right = ranking(rt->right);
+    r->size_right = ranking(r->right);
+    r->size_left = ranking(r->left);
     return r;
 }
 
@@ -74,16 +96,15 @@ BSTnode* insertHelp(BSTnode* rt, long long int key){
     }
     if (rt->key > key){
         rt->left = insertHelp(rt->left, key);
+        rt->size_left++;
     }
     else {
         rt->right = insertHelp(rt->right, key);
+        rt->size_right++;
     }
 
     rt->height = 1 + max(h(rt->left), h(rt->right));
     int balance = getBalance(rt);
-
-    if (rt->right != nullptr) rt->size_right = (rt->right->size_right) + (rt->right->size_left);
-    if (rt->left != nullptr) rt->size_left = (rt->left->size_right) + (rt->left->size_left);
 
     if (balance < -1 && key >= rt->right->key){
         return leftRotate(rt);
@@ -108,32 +129,6 @@ void insert(BST* bst, long long int key){
     bst->nodecount++;
 }
 
-long long int findIndex(BSTnode* rt, long long int key){
-    if (rt->key == key){
-        return rt->size_left + 1;
-    }
-    else if (rt->key < key){
-        return (rt->size_left) + 1 + findIndex(rt->right, key);
-    }
-    else {
-        findIndex(rt->left, key);
-    }
-}
-
-bool present(BSTnode* rt, long long int key){
-    if (rt == nullptr) return false;
-
-    if (rt->key == key){
-        return true;
-    }
-    else if (rt->key < key){
-        return (rt->right, key);
-    }
-    else {
-        return present(rt->left, key);
-    }
-}
-
 int main(){
     int q, y, x;
     cin >> q;
@@ -147,13 +142,14 @@ int main(){
             insert(bst, x);
         }
         else {
-            if (present(bst->root, x) == false) cout << "Data tidak ada" << endl;
+            int index = findIndex(bst->root, x);
+            if (index < 0){
+                cout << "Data tidak ada" << endl;
+            }
             else {
-                int index = findIndex(bst->root, x);
                 cout << index << endl;
             }
         }
     }
-
     return 0;
 }

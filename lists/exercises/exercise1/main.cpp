@@ -14,6 +14,7 @@ typedef struct list {
     int cnt;
 } List;
 
+
 Link* create_link(char it, Link* nextval){
     Link* n = (Link*) malloc(sizeof(Link));
     n->element = it;
@@ -59,11 +60,11 @@ void moveToEnd(List* l){
 
 void print(List* l){
     moveToStart(l);
-    while (l->curr != l->tail){
-        cout << l->curr->element;
-        l->curr = l->curr->next;
+    while (l->curr->next != NULL){
+        cout << l->curr->next->element;
+        l->curr->next = l->curr->next->next;
     }
-    cout << l->tail->element << endl;
+    cout << endl;
 }
 
 int main(){

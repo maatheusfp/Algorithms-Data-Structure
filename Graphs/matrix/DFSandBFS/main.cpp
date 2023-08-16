@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <string.h>
 using namespace std;
 
 typedef struct graph{
@@ -45,11 +46,12 @@ int next(Graph* g, int v, int w){
 }
 
 void addEdge(Graph* g, int i, int j){
-    if (g->matrix[i][j] == 1){
+    if (g->matrix[i][j] == 1 || g->matrix[j][i] == 1){
         return;
     }
     g->numEdge++;
     g->matrix[i][j] = 1;
+    g->matrix[j][i] = 1;
 }
 
 void delEdge(Graph* g, int i, int j){
@@ -61,7 +63,7 @@ void delEdge(Graph* g, int i, int j){
 }
 
 void DFS(Graph* g, int v){
-    g->path[v] = v;
+    cout << v << " ";
     setMark(g, v, 1);
     int w = first(g,v);
 
@@ -69,11 +71,6 @@ void DFS(Graph* g, int v){
         if (getMark(g, w) == 0) DFS(g, w);
         w = next(g, v, w);
     }
-
-    for (int i = 0; i < g->size; i++){
-        cout << g->path[i] << " ";
-    }
-    cout << endl;
 }
 
 void BFS(Graph* g, int start){
@@ -84,7 +81,7 @@ void BFS(Graph* g, int start){
     while (q.size() > 0){
         int v = q.front();
         q.pop();
-        g->path[v] = v;
+        cout << v << " ";
         int w = first(g, v);
 
         while(w < g->size){
@@ -96,30 +93,50 @@ void BFS(Graph* g, int start){
             w = next(g, v, w);
         }
     }
-    for (int i = 0; i < g->size; i++){
-        cout << g->path[i] << " ";
-    }
-    cout << endl;
 }
 
-void graphTraverseDFS(Graph* g){
+void graphTraverseDFS(Graph* g, int start){
     for (int v = 0; v < g->size; v++){
         setMark(g, v, 0);
     }
+    DFS(g, start);
     for (int v = 0; v < g->size; v++){
         if (getMark(g, v) == 0) DFS(g,v);
     }
 }
 
-void graphTraverseBFS(Graph* g){
+void graphTraverseBFS(Graph* g, int start){
     for (int v = 0; v < g->size; v++){
         setMark(g, v, 0);
     }
+    BFS(g, start);
     for (int v = 0; v < g->size; v++){
         if (getMark(g, v) == 0) BFS(g,v);
     }
 }
 
 int main(){
+    int n, q, x, y;
+    cin >> n >> q;
+    char comando[10];
+
+    Graph* g = create_graph(n);
+
+    while (q--){
+        cin >> comando >> x;
+        if (comando[0] == 'a'){
+            cin >> y;
+            addEdge(g, x, y);
+        }
+        else if (comando[0] == 'B'){
+            graphTraverseBFS(g, x);
+            cout << endl;
+        }
+        else {
+            graphTraverseDFS(g, x);
+            cout << endl;
+        }
+    }
+
     return 0;
 }

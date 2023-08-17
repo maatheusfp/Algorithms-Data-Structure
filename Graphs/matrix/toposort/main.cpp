@@ -6,6 +6,7 @@ typedef struct graph {
     int** matrix;
     int numEdge, size;
     int* mark;
+    stack<int> s;
 } Graph;
 
 Graph* create_graph(int n){
@@ -46,29 +47,38 @@ int getMark(Graph* g, int v){
     return g->mark[v];
 }
 
-void toposort(Graph* g, int v, stack<int> s){
+void toposort(Graph* g, int v){
     setMark(g, v, 1);
     int w = first(g, v);
     while (w < g->size){
-        if (getMark(g, w) == 0) toposort(g, w, s);
+        if (getMark(g, w) == 0) toposort(g, w);
         w = next(g, v, w);
     }
-    s.push(v);
+    g->s.push(v);
 }
 
 void graphTraverse(graph* g){
     for (int v = 0; v < g->size; v++) setMark(g, v, 0);
-    stack<int> s;
     for (int v = 0; v < g->size; v++){
-        if (getMark(g, v) == 0) toposort(g, v, s);
+        if (getMark(g, v) == 0) toposort(g, v);
     }
-    for (int i = 0; i < s.size(); i++){
-        int last = s.top();
+    int size = g->s.size();
+    for (int i = 0; i < size; i++){
+        int last = g->s.top();
         cout << last << " ";
-        s.pop();
+        g->s.pop();
     }
 }
 
 int main(){
+    int n, m, u, v;
+    cin >> n >> m;
+    Graph* g = create_graph(n);
+
+    while (m--){
+        cin >> u >> v;
+        addEdge(g, u, v);
+    }
+    graphTraverse(g);
     return 0;
 }

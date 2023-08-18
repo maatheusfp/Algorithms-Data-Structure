@@ -1,0 +1,119 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+
+typedef struct graph{
+    int** matrix;
+    int numEdge, size;
+    int* mark;
+    int* path;
+    int* sum;
+} Graph;
+
+Graph* create_graph(int n){
+    Graph* g = new Graph;
+    g->mark = new int[n];
+    g->matrix = new int*[n];
+    for (int i = 0; i < n; i++){
+        g->matrix[i] = new int[n];
+    }
+    g->path = new int[n];
+    g->sum = new int[n];
+    g->numEdge = 0;
+    g->size = n;
+    return g;
+}
+
+void setMark(Graph* g, int v, int mark){
+    g->mark[v] = mark;
+}
+
+int getMark(Graph* g, int v){
+    return g->mark[v];
+}
+
+int first(Graph* g, int v){
+    for (int i = 0; i < g->size; i++){
+        if (g->matrix[v][i] != 0) return i;
+    }
+    return g->size;
+}
+
+int next(Graph* g, int v, int w){
+    for (int i = w + 1; i < g->size; i++){
+        if (g->matrix[v][i] != 0) return i;
+    }
+    return g->size;
+}
+
+void addEdge(Graph* g, int i, int j){
+    if (g->matrix[i][j] == 1 || g->matrix[j][i] == 1){
+        return;
+    }
+    g->numEdge++;
+    g->matrix[i][j] = 1;
+    g->matrix[j][i] = 1;
+}
+
+void BFS(Graph* g, int start){
+    queue<int> q;
+    q.push(start);
+    setMark(g, start, 1);
+
+    while (q.size() > 0){
+        int v = q.front();
+        q.pop();
+        int w = first(g, v);
+
+        while(w < g->size){
+            if (getMark(g, w) == 0){
+                setMark(g, w, 1);
+                q.push(w);
+                g->path[w] = g->path[v] + 1;
+                g->sum[w] += g->sum[v];
+            }
+
+            w = next(g, v, w);
+        }
+    }
+}
+
+void graphTraverseBFS(Graph* g, int start){
+    for (int v = 0; v < g->size; v++){
+        setMark(g, v, 0);
+        g->path[v] = 0;
+    }
+    BFS(g, start);
+}
+
+int main(){
+    int n, c, value, u, v, origin, destiny;
+    cin >> n;
+    Graph* g = create_graph(n);
+
+    for (int i = 0; i < n; i++){
+        cin >> value;
+        g->sum[i] = value;
+    }
+
+    cin >> c;
+    while(c--){
+        cin >> u >> v;
+        addEdge(g, u, v);
+    }
+
+    cin >> origin;
+    graphTraverseBFS(g, origin);
+
+    for (int i = 0; i < n/2; i++){
+        cin >> destiny;
+        if (g->mark[destiny] == 0){
+            cout << -1 << endl;
+        }
+        else {
+            cout << g->sum[destiny] << endl;
+        }
+    }
+
+    return 0;
+}

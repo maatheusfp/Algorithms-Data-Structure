@@ -54,28 +54,25 @@ void addEdge(Graph* g, int i, int j){
     g->matrix[j][i] = 1;
 }
 
-void BFS(Graph* g, int start, int destiny){
+void BFS(Graph* g, int start){
     queue<int> q;
-    bool found = false;
     q.push(start);
     setMark(g, start, 1);
 
-    while (q.size() > 0 && found == false){
+    while (q.size() > 0){
         int v = q.front();
-        if (v == destiny) found = true;
-        else {
-            q.pop();
-            g->path[v] += 1;
-            int w = first(g, v);
+        q.pop();
+        int w = first(g, v);
 
-            while(w < g->size){
-                if (getMark(g, w) == 0){
-                    setMark(g, w, 1);
-                    q.push(w);
-                }
-
-                w = next(g, v, w);
+        while(w < g->size){
+            if (getMark(g, w) == 0){
+                setMark(g, w, 1);
+                q.push(w);
+                int index = q.front();
+                g->path[w] = g->path[index] + 1;
             }
+
+            w = next(g, v, w);
         }
     }
 }
@@ -85,7 +82,8 @@ void graphTraverseBFS(Graph* g, int start){
         setMark(g, v, 0);
         g->path[v] = 0;
     }
+    // BFS(g, start);
     for (int v = 0; v < g->size; v++){
-        if (getMark(g, v) == 0) BFS(g, start, v);
+        if (getMark(g, v) == 0) BFS(g,v);
     }
 }
